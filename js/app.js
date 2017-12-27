@@ -14,6 +14,10 @@ function shuffle(a) {
     return a;
 }
 
+function cardName(card) {
+    return card.querySelector('i').classList[1];
+}
+
 /*
  * set up the event listener for a card. If a card is clicked:
  *  - display the card's symbol (put this functionality in another function that you call from this one)
@@ -36,6 +40,19 @@ function cardClick(e) {
             openCard = e.target;
         } else {
             // There is another open card; check for a match.
+            if (cardName(openCard) === cardName(e.target)) {
+                // Success! Keep both cards flipped.
+                classes.remove('open');
+                classes.add('match');
+                openCard.classList.remove('open');
+                openCard.classList.add('match');
+                openCard = null;
+            } else {
+                // Wah-wah, try again. Flip both cards face down again.
+                classes.remove('open');
+                openCard.classList.remove('open');
+                openCard = null;
+            }
         }
     }
 }
