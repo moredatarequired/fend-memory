@@ -18,6 +18,33 @@ function cardName(card) {
     return card.querySelector('i').classList[1];
 }
 
+function cardState(card) {
+    if (card.classList.contains('match')) {
+        return 'match';
+    } else if (card.classList.contains('open')) {
+        return 'open';
+    } else {
+        return 'hidden';
+    }
+}
+
+function isOpen(card) {
+    return card.classList.contains('open');
+}
+function isMatch(card) {
+    return card.classList.contains('match');
+}
+function isHidden(card) {
+    return !(isOpen(card) || isMatch(card));
+}
+
+function clearState(card) {
+    // Note: this effectively makes a card hidden, since that's the default state.
+    card.classList.remove('match');
+    card.classList.remove('open');
+    return card;
+}
+
 /*
  * set up the event listener for a card. If a card is clicked:
  *  - display the card's symbol (put this functionality in another function that you call from this one)
