@@ -18,10 +18,19 @@ function restartGame() {
         clearState(cards[index]);
         cards[index].style.order = flexOrder[index];
     }
-    moves = 0;
+    makeMove(zero = true);
 }
 
 restartGame();
+
+function makeMove(zero = false) {
+    if (zero) {
+        moves = 0;
+    } else {
+        moves++;
+    }
+    document.querySelector('.moves').innerHTML = moves;
+}
 
 function cardName(card) {
     return card.querySelector('i').classList[1];
@@ -60,7 +69,7 @@ function cardClick(e) {
         // Card is already revealed, do nothing.
         return;
     }
-    moves++;
+    makeMove();
     // Card is hidden, flip it over.
     setOpen(card);
     if (!openCard) {
