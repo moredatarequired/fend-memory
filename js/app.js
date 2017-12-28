@@ -1,9 +1,6 @@
 // The cards that the player tries to match.
 const cards = document.querySelectorAll('.card');
-
-// Use the Flexbox 'order' property to shuffle display order.
-let flexOrder = shuffle([...Array(16).keys()]);
-cards.forEach((card, index) => card.style.order = flexOrder[index]);
+let moves;
 
 // shuffle function from https://stackoverflow.com/questions/6274339
 function shuffle(a) {
@@ -14,73 +11,70 @@ function shuffle(a) {
     return a;
 }
 
-function cardName(card) {
-    return card.querySelector('i').classList[1];
+function restartGame() {
+    // Use the Flexbox 'order' property to shuffle display order.
+    const flexOrder = shuffle([...Array(16).keys()]);
+    for (index in flexOrder) {
+        clearState(cards[index]);
+        cards[index].style.order = flexOrder[index];
+    }
+    moves = 0;
 }
 
-function cardState(card) {
-    if (card.classList.contains('match')) {
-        return 'match';
-    } else if (card.classList.contains('open')) {
-        return 'open';
-    } else {
-        return 'hidden';
-    }
+restartGame();
+
+function cardName(card) {
+    return card.querySelector('i').classList[1];
 }
 
 function isOpen(card) {
     return card.classList.contains('open');
 }
-function isMatch(card) {
+function isMatched(card) {
     return card.classList.contains('match');
 }
-function isHidden(card) {
-    return !(isOpen(card) || isMatch(card));
+
+function matches(card1, card2) {
+    return cardName(card1) === cardName(card2);
 }
 
 function clearState(card) {
     // Note: this effectively makes a card hidden, since that's the default state.
     card.classList.remove('match');
     card.classList.remove('open');
-    return card;
 }
 
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
+function setOpen(card) {
+    clearState(card);
+    card.classList.add('open');
+}
+function setMatched(card) {
+    clearState(card);
+    card.classList.add('match');
+}
+
 let openCard = null;
 function cardClick(e) {
-    let classes = e.target.classList;
-    if (classes.contains('match') || classes.contains('open')) {
+    let card = e.target;
+    if (isOpen(card) || isMatched(card)) {
         // Card is already revealed, do nothing.
+        return;
+    }
+    moves++;
+    // Card is hidden, flip it over.
+    setOpen(card);
+    if (!openCard) {
+        openCard = card;
     } else {
-        // Card is hidden, flip it over.
-        classes.add('open');
-        if (!openCard) {
-            openCard = e.target;
-        } else {
-            // There is another open card; check for a match.
-            if (cardName(openCard) === cardName(e.target)) {
-                // Success! Keep both cards flipped.
-                classes.remove('open');
-                classes.add('match');
-                openCard.classList.remove('open');
-                openCard.classList.add('match');
-                openCard = null;
-            } else {
-                // Wah-wah, try again. Flip both cards face down again.
-                classes.remove('open');
-                openCard.classList.remove('open');
-                openCard = null;
-            }
+        clearState(openCard);
+        clearState(card);
+        // There is another open card; check for a match.
+        if (matches(card, openCard)) {
+            // Success! Keep both cards flipped.
+            setMatched(card);
+            setMatched(openCard);
         }
+        openCard = null;
     }
 }
 cards.forEach(card => card.addEventListener('click', cardClick));
