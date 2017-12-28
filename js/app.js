@@ -36,19 +36,25 @@ function matches(card1, card2) {
     return cardName(card1) === cardName(card2);
 }
 
-function clearState(card) {
+function clearState(...cards) {
     // Note: this effectively makes a card hidden, since that's the default state.
-    card.classList.remove('match');
-    card.classList.remove('open');
+    for (card of cards) {
+        card.classList.remove('match');
+        card.classList.remove('open');
+    }
 }
 
-function setOpen(card) {
-    clearState(card);
-    card.classList.add('open');
+function setOpen(...cards) {
+    for (card of cards) {
+        clearState(card);
+        card.classList.add('open');
+    }
 }
-function setMatched(card) {
-    clearState(card);
-    card.classList.add('match');
+function setMatched(...cards) {
+    for (card of cards) {
+        clearState(card);
+        card.classList.add('match');
+    }
 }
 
 function cardClick(e) {
@@ -63,13 +69,11 @@ function cardClick(e) {
     if (!openCard) {
         openCard = card;
     } else {
-        clearState(openCard);
-        clearState(card);
+        clearState(card, openCard);
         // There is another open card; check for a match.
         if (matches(card, openCard)) {
             // Success! Keep both cards flipped.
-            setMatched(card);
-            setMatched(openCard);
+            setMatched(card, openCard);
         }
         openCard = null;
     }
