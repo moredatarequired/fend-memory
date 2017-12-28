@@ -1,5 +1,6 @@
 // The cards that the player tries to match.
 const cards = document.querySelectorAll('.card');
+let openCard = null;
 let moves;
 
 // shuffle function from https://stackoverflow.com/questions/6274339
@@ -10,18 +11,6 @@ function shuffle(a) {
     }
     return a;
 }
-
-function restartGame() {
-    // Use the Flexbox 'order' property to shuffle display order.
-    const flexOrder = shuffle([...Array(16).keys()]);
-    for (index in flexOrder) {
-        clearState(cards[index]);
-        cards[index].style.order = flexOrder[index];
-    }
-    makeMove(zero = true);
-}
-
-restartGame();
 
 function makeMove(zero = false) {
     if (zero) {
@@ -62,7 +51,6 @@ function setMatched(card) {
     card.classList.add('match');
 }
 
-let openCard = null;
 function cardClick(e) {
     let card = e.target;
     if (isOpen(card) || isMatched(card)) {
@@ -87,3 +75,18 @@ function cardClick(e) {
     }
 }
 cards.forEach(card => card.addEventListener('click', cardClick));
+
+function restartGame() {
+    // Use the Flexbox 'order' property to shuffle display order.
+    const flexOrder = shuffle([...Array(16).keys()]);
+    for (index in flexOrder) {
+        clearState(cards[index]);
+        cards[index].style.order = flexOrder[index];
+    }
+    makeMove(zero = true);
+    openCard = null;
+}
+document.querySelector('.restart').addEventListener('click', restartGame);
+
+// Shuffle and hide cards on start.
+restartGame();
