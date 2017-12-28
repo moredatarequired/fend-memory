@@ -1,7 +1,8 @@
 // The cards that the player tries to match.
 const cards = document.querySelectorAll('.card');
+// Active / face up card, if any exists (there can only be one).
 let openCard = null;
-let moves;
+let moveCount;
 
 // shuffle function from https://stackoverflow.com/questions/6274339
 function shuffle(a) {
@@ -14,11 +15,11 @@ function shuffle(a) {
 
 function makeMove(zero = false) {
     if (zero) {
-        moves = 0;
+        moveCount = 0;
     } else {
-        moves++;
+        moveCount++;
     }
-    document.querySelector('.moves').innerHTML = moves;
+    document.querySelector('.moves').innerHTML = moveCount;
 }
 
 function cardName(card) {
