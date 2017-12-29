@@ -4,6 +4,9 @@ const cards = document.querySelectorAll('.card');
 let openCard = null;
 let moveCount;
 
+// Modal that appears once a game has been won.
+const modal = document.getElementById('win-game');
+
 // shuffle function from https://stackoverflow.com/questions/6274339
 function shuffle(a) {
     for (let i = a.length - 1; i > 0; i--) {
@@ -35,6 +38,11 @@ function isMatched(card) {
 
 function matches(card1, card2) {
     return cardName(card1) === cardName(card2);
+}
+
+// Return true iff the current board is in a winning state.
+function isWon() {
+    return Array.prototype.map.call(cards, c => isMatched(c)).reduce((p, c) => p && c, true);
 }
 
 function clearState(...cards) {
@@ -78,6 +86,9 @@ function cardClick(e) {
         }
         openCard = null;
     }
+    if (isWon()) {
+        modal.style.display = 'block';
+    }
 }
 cards.forEach(card => card.addEventListener('click', cardClick));
 
@@ -93,9 +104,7 @@ function restartGame() {
 }
 document.querySelector('.restart').addEventListener('click', restartGame);
 
-const modal = document.getElementById('win-game');
-const closeModal = modal.querySelector('.close');
-closeModal.addEventListener('click', function() {
+modal.querySelector('.close').addEventListener('click', function() {
     modal.style.display = 'none';
 });
 window.onclick = function(event) {
