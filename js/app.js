@@ -93,5 +93,16 @@ function restartGame() {
 }
 document.querySelector('.restart').addEventListener('click', restartGame);
 
+const modal = document.getElementById('win-game');
+const closeModal = modal.querySelector('.close');
+closeModal.addEventListener('click', function() {
+    modal.style.display = 'none';
+});
+window.onclick = function(event) {
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+};
+
 // Shuffle and hide cards on start.
 restartGame();
