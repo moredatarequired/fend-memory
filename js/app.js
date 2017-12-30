@@ -7,6 +7,9 @@ let moveCount;
 // Modal that appears once a game has been won.
 const modal = document.getElementById('win-game');
 
+// The time in milliseconds that this game started, or null if no timer is running.
+let startTime = null;
+
 // shuffle function from https://stackoverflow.com/questions/6274339
 function shuffle(a) {
     for (let i = a.length - 1; i > 0; i--) {
@@ -22,11 +25,22 @@ function makeMove(zero = false) {
     } else {
         moveCount++;
     }
-    document.querySelector('.moves').innerHTML = moveCount;
+    for (moveCounter of document.querySelectorAll('.moves')) {
+        moveCounter.innerHTML = moveCount;
+    }
+}
+
+function setTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    seconds = seconds % 60;
+    const timeString = `${minutes}:${(seconds < 10 ? '0' : '') + seconds}`;
+    for (timer of document.querySelectorAll('.timer')) {
+        timer.innerHTML = timeString;
+    }
 }
 
 function cardName(card) {
-    return card.querySelector('i').classList[1];
+    return card.querySelector('.fa').classList[1];
 }
 
 function isOpen(card) {
@@ -86,7 +100,13 @@ function cardClick(e) {
         }
         openCard = null;
     }
+    if (startTime === null) {
+        startTime = Date.now();
+    }
     if (isWon()) {
+        // Stop timer.
+        startTime = null;
+        // Show winning modal.
         modal.style.display = 'block';
     }
 }
@@ -101,6 +121,8 @@ function restartGame() {
     }
     makeMove(zero = true);
     openCard = null;
+    startTime = null;
+    setTime(0);
 }
 document.querySelector('.restart').addEventListener('click', restartGame);
 
@@ -109,6 +131,17 @@ window.onclick = function(event) {
         modal.style.display = 'none';
     }
 };
+
+function updateTimer() {
+    if (startTime === null) {
+        // No timer running, do nothing.
+        return;
+    }
+    const elapsedMilliseconds = Date.now() - startTime;
+    const totalSeconds = Math.floor(elapsedMilliseconds / 1000);
+    setTime(totalSeconds);
+}
+window.setInterval(updateTimer, 100);
 
 // Shuffle and hide cards on start.
 restartGame();
