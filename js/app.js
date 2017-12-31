@@ -3,6 +3,7 @@ const cards = document.querySelectorAll('.card');
 // Active / face up card, if any exists (there can only be one).
 let openCard = null;
 let moveCount;
+let starCount;
 
 // Modal that appears once a game has been won.
 const modal = document.getElementById('win-game');
@@ -31,6 +32,7 @@ function makeMove(zero = false) {
     for (moveCounter of document.querySelectorAll('.moves')) {
         moveCounter.innerHTML = moveCount;
     }
+    assignStars();
 }
 
 function setTime(seconds) {
@@ -80,6 +82,29 @@ function setMatched(...cards) {
     for (card of cards) {
         clearState(card);
         card.classList.add('match');
+    }
+}
+
+function assignStars() {
+    if (moveCount < 25) {
+        setStars(3);
+    } else if (moveCount < 33) {
+        setStars(2);
+    } else {
+        setStars(1);
+    }
+}
+
+// Turn on/off stars, display 1-3.
+function setStars(n) {
+    if (starCount === n) {
+        return;
+    }
+    startCount = n;
+    for (let i = 1; i <= 3; i++) {
+        const on = n >= i ? 'fa-star' : 'fa-star-o';
+        const off = n >= i ? 'fa-star-o' : 'fa-star';
+        document.querySelector(`.stars li:nth-child(${i}) i`).classList.replace(off, on);
     }
 }
 
