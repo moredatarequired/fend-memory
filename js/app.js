@@ -10,6 +10,9 @@ const modal = document.getElementById('win-game');
 // The time in milliseconds that this game started, or null if no timer is running.
 let startTime = null;
 
+// Lock user interaction while waiting for animations to complete.
+let inProgress = false;
+
 // shuffle function from https://stackoverflow.com/questions/6274339
 function shuffle(a) {
     for (let i = a.length - 1; i > 0; i--) {
@@ -82,35 +85,42 @@ function setMatched(...cards) {
 
 function cardClick(e) {
     let card = e.target;
-    if (isOpen(card) || isMatched(card)) {
+    if (isOpen(card) || isMatched(card) || inProgress) {
         // Card is already revealed, do nothing.
         return;
     }
     makeMove();
+    // Start the timer if this is the first move.
+    if (startTime === null) {
+        startTime = Date.now();
+    }
     // Card is hidden, flip it over.
     setOpen(card);
     if (!openCard) {
         openCard = card;
     } else {
-        clearState(card, openCard);
-        // There is another open card; check for a match.
-        if (matches(card, openCard)) {
-            // Success! Keep both cards flipped.
-            setMatched(card, openCard);
-        }
-        openCard = null;
+        inProgress = true;
+        window.setTimeout(checkMatch, 600, card);
     }
-    if (startTime === null) {
-        startTime = Date.now();
+}
+cards.forEach(card => card.addEventListener('click', cardClick));
+
+function checkMatch(card) {
+    clearState(card, openCard);
+    // There is another open card; check for a match.
+    if (matches(card, openCard)) {
+        // Success! Keep both cards flipped.
+        setMatched(card, openCard);
     }
+    openCard = null;
     if (isWon()) {
         // Stop timer.
         startTime = null;
         // Show winning modal.
         modal.style.display = 'block';
     }
+    inProgress = false; 
 }
-cards.forEach(card => card.addEventListener('click', cardClick));
 
 function restartGame() {
     // Use the Flexbox 'order' property to shuffle display order.
@@ -121,6 +131,7 @@ function restartGame() {
     }
     makeMove(zero = true);
     openCard = null;
+    inProgress = false; 
     startTime = null;
     setTime(0);
 }

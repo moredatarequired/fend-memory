@@ -63,10 +63,14 @@ h1 {
     justify-content: center;
     align-items: center;
     box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, 0.5);
+
+    transform: rotateY(0deg);
+    transition: 0.6s;
+	transform-style: preserve-3d;
 }
 
 .deck .card.open {
-    transform: rotateY(0);
+    transform: rotateY(180deg);
     background: #02b3e4;
     cursor: default;
     font-size: 33px;
