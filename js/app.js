@@ -144,7 +144,7 @@ function checkMatch(card) {
         // Show winning modal.
         modal.style.display = 'block';
     }
-    inProgress = false; 
+    inProgress = false;
 }
 
 function restartGame() {
@@ -156,13 +156,13 @@ function restartGame() {
     }
     makeMove(zero = true);
     openCard = null;
-    inProgress = false; 
+    inProgress = false;
     startTime = null;
     setTime(0);
 }
 document.querySelector('.restart').addEventListener('click', restartGame);
 
-window.onclick = function(event) {
+window.onclick = function (event) {
     if (event.target === modal) {
         modal.style.display = 'none';
     }
