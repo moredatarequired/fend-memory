@@ -2,12 +2,15 @@
 
 ## Table of Contents
 
-* [Instructions](#instructions)
+* [Gameplay](#gameplay)
+* [Dependencies](#dependencies)
 
-## Instructions
+## Gameplay
 
-The starter project has some HTML and CSS styling to display a static version of the Memory Game project. You'll need to convert this project from a static project to an interactive one. This will require modifying the HTML and CSS files, but primarily the JavaScript file.
+Example of a classic memory game, often called "concentration". Click on a card to turn it over, then click on a second card. If the second card matches, the two cards remain face up. If they don't, both cards turn over. Remeber what each card is so that you can flip it over as soon as you've found its mate! Once all cards have been matched, you win.
 
-To get started, open `js/app.js` and start building out the app's functionality
+The objective is to turn match all 16 cards in as few moves and as little time as possible. Your score drops from three stars to two stars after 24 moves, and then to one star after 32.
 
-For specific, detailed instructions, look at the project instructions in the [Udacity Classroom](https://classroom.udacity.com/me).
+## Dependencies
+
+The game loads the card symbols from Font Awesome 4, and will only work on browsers that support ES6.
