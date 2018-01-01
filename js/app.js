@@ -59,7 +59,8 @@ function setTime(seconds) {
 }
 
 function cardName(card) {
-    return card.querySelector('.fa').classList[1];
+    const tag = card.querySelector('.fa');
+    return tag ? tag.classList[1] : undefined;
 }
 
 function isOpen(card) {
@@ -100,9 +101,9 @@ function setMatched(...cards) {
 }
 
 function assignStars() {
-    if (moveCount < 25) {
+    if (moveCount < 13) {
         setStars(3);
-    } else if (moveCount < 33) {
+    } else if (moveCount < 17) {
         setStars(2);
     } else {
         setStars(1);
@@ -130,7 +131,6 @@ function cardClick(e) {
         // Card is already revealed, do nothing.
         return;
     }
-    makeMove();
     // Start the timer if this is the first move.
     if (startTime === null) {
         startTime = Date.now();
@@ -147,6 +147,7 @@ function cardClick(e) {
 cards.forEach(card => card.addEventListener('click', cardClick));
 
 function checkMatch(card) {
+    makeMove();
     clearState(card, openCard);
     // There is another open card; check for a match.
     if (matches(card, openCard)) {
