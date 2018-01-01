@@ -118,7 +118,9 @@ function setStars(n) {
     for (let i = 1; i <= 3; i++) {
         const on = n >= i ? 'fa-star' : 'fa-star-o';
         const off = n >= i ? 'fa-star-o' : 'fa-star';
-        document.querySelector(`.stars li:nth-child(${i}) i`).classList.replace(off, on);
+        for (let starList of document.querySelectorAll(`.stars li:nth-child(${i}) i`)) {
+            starList.classList.replace(off, on);
+        }
     }
 }
 

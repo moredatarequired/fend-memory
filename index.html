@@ -30,9 +30,12 @@
                 </li>
             </ul>
 
-            <div><span class="moves">0</span> Moves</div>
+            <div>
+                <span class="moves">0</span> Moves</div>
 
-            <div>Time <span class="timer">0:00</span></div>
+            <div>Time
+                <span class="timer">0:00</span>
+            </div>
 
             <div class="restart">
                 <i class="fa fa-repeat"></i>
@@ -94,7 +97,20 @@
     <div id="win-game" class="modal">
         <div class="modal-content">
             <h3>Congratulations!</h3>
-            <p>You won in <span class="moves">0</span> moves and took <span class="total-time"></span>.</p>
+            <div class='score-panel'>
+                <ul class="stars">
+                    <li>
+                        <i class="fa fa-star"></i>
+                    </li>
+                    <li>
+                        <i class="fa fa-star"></i>
+                    </li>
+                    <li>
+                        <i class="fa fa-star"></i>
+                    </li>
+                </ul>
+            </div>
+            <p>You won in <span class="moves">0</span> moves and took<span class="total-time"></span>.</p>
             <div class='restart new-game'>Play again</div>
         </div>
     </div>
