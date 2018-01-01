@@ -134,3 +134,12 @@ h1 {
     justify-content: center;
     align-items: center;
 }
+
+.new-game {
+    font-size: 24;
+    border: 2px solid darkblue;
+    padding: 15px;
+    border-radius: 5px;
+    background: mistyrose;
+    cursor: pointer;
+}

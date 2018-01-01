@@ -35,12 +35,26 @@ function makeMove(zero = false) {
     assignStars();
 }
 
+function formatWithPluralOrNone(number, name) {
+    if (!number) {
+        return '';
+    }
+    return number + ' ' + name + (number > 1 ? 's' : '');
+}
+
 function setTime(seconds) {
     const minutes = Math.floor(seconds / 60);
     seconds = seconds % 60;
-    const timeString = `${minutes}:${(seconds < 10 ? '0' : '') + seconds}`;
+    const timerString = `${minutes}:${(seconds < 10 ? '0' : '') + seconds}`;
     for (timer of document.querySelectorAll('.timer')) {
-        timer.innerHTML = timeString;
+        timer.innerHTML = timerString;
+    }
+    const minuteString = formatWithPluralOrNone(minutes, 'minute');
+    const secondsString = formatWithPluralOrNone(seconds, 'second');
+    const conjunction = minuteString && secondsString ? ' and ' : '';
+    const resultTime = `${minuteString}${conjunction}${secondsString}`;
+    for (timer of document.querySelectorAll('.total-time')) {
+        timer.innerHTML = resultTime;
     }
 }
 
@@ -159,8 +173,9 @@ function restartGame() {
     inProgress = false;
     startTime = null;
     setTime(0);
+    modal.style.display = 'none';
 }
-document.querySelector('.restart').addEventListener('click', restartGame);
+document.querySelectorAll('.restart').forEach(n => n.addEventListener('click', restartGame));
 
 window.onclick = function (event) {
     if (event.target === modal) {
